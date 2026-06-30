@@ -10,16 +10,30 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { SseModule } from './sse/sse.module';
 import { SeedModule } from './seed/seed.module';
 import { JwtAuthGuard } from './auth/auth.guard';
-import { User, Event, TicketType, Registration, RegistrationItem, WaitlistEntry } from './common';
+import {
+  User,
+  Event,
+  TicketType,
+  Registration,
+  RegistrationItem,
+  WaitlistEntry,
+} from './common';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService) => ({
-        type: 'better-sqlite3' as any,
+        type: 'better-sqlite3',
         database: config.get<string>('DATABASE_URL', 'data/events.db'),
-        entities: [User, Event, TicketType, Registration, RegistrationItem, WaitlistEntry],
+        entities: [
+          User,
+          Event,
+          TicketType,
+          Registration,
+          RegistrationItem,
+          WaitlistEntry,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],

@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Registration } from './registration.entity';
 import { TicketType } from './ticket-type.entity';
 
@@ -13,7 +19,7 @@ export class RegistrationItem {
   @Column({ type: 'real' })
   unitPrice: number;
 
-  @ManyToOne(() => Registration, registration => registration.items)
+  @ManyToOne(() => Registration, (registration) => registration.items)
   @JoinColumn({ name: 'registrationId' })
   registration: Registration;
 

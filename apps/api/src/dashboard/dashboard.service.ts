@@ -27,7 +27,8 @@ export class DashboardService {
     const activeEvents = myEvents.filter((e) => e.status === 'active').length;
     const draftEvents = myEvents.filter((e) => e.status === 'draft').length;
     const totalRegistrations = myEvents.reduce(
-      (sum, e) => sum + e.registrations.filter((r) => r.status === 'confirmed').length,
+      (sum, e) =>
+        sum + e.registrations.filter((r) => r.status === 'confirmed').length,
       0,
     );
 
@@ -39,7 +40,9 @@ export class DashboardService {
         title: e.title,
         date: e.date,
         location: e.location,
-        registrationsCount: e.registrations.filter((r) => r.status === 'confirmed').length,
+        registrationsCount: e.registrations.filter(
+          (r) => r.status === 'confirmed',
+        ).length,
       }));
 
     // My registrations stats
@@ -50,10 +53,16 @@ export class DashboardService {
 
     const totalMyRegistrations = myRegs.length;
     const upcomingRegs = myRegs.filter(
-      (r) => r.status === 'confirmed' && r.event && new Date(r.event.date) > new Date(),
+      (r) =>
+        r.status === 'confirmed' &&
+        r.event &&
+        new Date(r.event.date) > new Date(),
     ).length;
     const pastRegs = myRegs.filter(
-      (r) => r.status === 'confirmed' && r.event && new Date(r.event.date) <= new Date(),
+      (r) =>
+        r.status === 'confirmed' &&
+        r.event &&
+        new Date(r.event.date) <= new Date(),
     ).length;
 
     // My waitlist

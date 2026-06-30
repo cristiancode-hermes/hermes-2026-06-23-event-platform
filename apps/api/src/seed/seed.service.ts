@@ -2,7 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { User, Event, TicketType, Registration, RegistrationItem, WaitlistEntry } from '../common';
+import {
+  User,
+  Event,
+  TicketType,
+  Registration,
+  RegistrationItem,
+  WaitlistEntry,
+} from '../common';
 
 @Injectable()
 export class SeedService {
@@ -58,7 +65,8 @@ export class SeedService {
     const techConf = this.eventRepo.create({
       title: 'Tech Conference 2026',
       slug: 'tech-conference-2026',
-      description: 'The biggest tech conference of the year featuring keynotes from industry leaders, hands-on workshops, and networking opportunities.',
+      description:
+        'The biggest tech conference of the year featuring keynotes from industry leaders, hands-on workshops, and networking opportunities.',
       date: new Date('2026-09-15T09:00:00Z'),
       endDate: new Date('2026-09-17T18:00:00Z'),
       location: 'Madrid, Spain',
@@ -67,14 +75,15 @@ export class SeedService {
       capacity: 500,
       status: 'active',
       userId: savedOrganizer.id,
-      organizer: { id: savedOrganizer.id } as any,
+      organizer: { id: savedOrganizer.id },
     });
     const savedTechConf = await this.eventRepo.save(techConf);
 
     const designMeetup = this.eventRepo.create({
       title: 'Design Meetup',
       slug: 'design-meetup',
-      description: 'Monthly design meetup for UX/UI designers to share experiences and learn new techniques.',
+      description:
+        'Monthly design meetup for UX/UI designers to share experiences and learn new techniques.',
       date: new Date('2026-07-20T16:00:00Z'),
       endDate: new Date('2026-07-20T20:00:00Z'),
       location: 'Barcelona, Spain',
@@ -83,14 +92,15 @@ export class SeedService {
       capacity: 50,
       status: 'active',
       userId: savedOrganizer.id,
-      organizer: { id: savedOrganizer.id } as any,
+      organizer: { id: savedOrganizer.id },
     });
     const savedDesignMeetup = await this.eventRepo.save(designMeetup);
 
     const ngWorkshop = this.eventRepo.create({
       title: 'Workshop Angular',
       slug: 'workshop-angular',
-      description: 'Intensive one-day workshop on Angular 19+ covering signals, standalone components, and new control flow.',
+      description:
+        'Intensive one-day workshop on Angular 19+ covering signals, standalone components, and new control flow.',
       date: new Date('2026-08-10T10:00:00Z'),
       endDate: new Date('2026-08-10T17:00:00Z'),
       location: 'Online',
@@ -99,7 +109,7 @@ export class SeedService {
       capacity: 30,
       status: 'active',
       userId: savedOrganizer.id,
-      organizer: { id: savedOrganizer.id } as any,
+      organizer: { id: savedOrganizer.id },
     });
     const savedNgWorkshop = await this.eventRepo.save(ngWorkshop);
 
@@ -128,7 +138,8 @@ export class SeedService {
       },
       {
         name: 'VIP',
-        description: 'VIP access with front-row seating and exclusive networking',
+        description:
+          'VIP access with front-row seating and exclusive networking',
         price: 599.99,
         capacity: 100,
         perOrderLimit: 2,
@@ -139,7 +150,7 @@ export class SeedService {
       {
         name: 'Standard',
         description: 'Regular admission',
-        price: 10.00,
+        price: 10.0,
         capacity: 50,
         perOrderLimit: 3,
         eventId: savedDesignMeetup.id,
@@ -157,7 +168,9 @@ export class SeedService {
       },
     ];
 
-    const savedTickets = await this.ticketTypeRepo.save(tickets.map((t) => this.ticketTypeRepo.create(t)));
+    const savedTickets = await this.ticketTypeRepo.save(
+      tickets.map((t) => this.ticketTypeRepo.create(t)),
+    );
     this.logger.log('Ticket types created');
 
     // 4. Create registrations
@@ -166,8 +179,8 @@ export class SeedService {
       totalPrice: 149.99,
       userId: savedAttendee.id,
       eventId: savedTechConf.id,
-      user: { id: savedAttendee.id } as any,
-      event: { id: savedTechConf.id } as any,
+      user: { id: savedAttendee.id },
+      event: { id: savedTechConf.id },
     });
     const savedReg1 = await this.regRepo.save(reg1);
 
@@ -176,18 +189,18 @@ export class SeedService {
       totalPrice: 599.99,
       userId: savedAttendee.id,
       eventId: savedTechConf.id,
-      user: { id: savedAttendee.id } as any,
-      event: { id: savedTechConf.id } as any,
+      user: { id: savedAttendee.id },
+      event: { id: savedTechConf.id },
     });
     const savedReg2 = await this.regRepo.save(reg2);
 
     const reg3 = this.regRepo.create({
       status: 'confirmed',
-      totalPrice: 10.00,
+      totalPrice: 10.0,
       userId: savedAttendee.id,
       eventId: savedDesignMeetup.id,
-      user: { id: savedAttendee.id } as any,
-      event: { id: savedDesignMeetup.id } as any,
+      user: { id: savedAttendee.id },
+      event: { id: savedDesignMeetup.id },
     });
     const savedReg3 = await this.regRepo.save(reg3);
 
@@ -196,8 +209,8 @@ export class SeedService {
       totalPrice: 79.99,
       userId: savedOrganizer.id,
       eventId: savedNgWorkshop.id,
-      user: { id: savedOrganizer.id } as any,
-      event: { id: savedNgWorkshop.id } as any,
+      user: { id: savedOrganizer.id },
+      event: { id: savedNgWorkshop.id },
     });
     const savedReg4 = await this.regRepo.save(reg4);
 
@@ -206,8 +219,8 @@ export class SeedService {
       totalPrice: 299.99,
       userId: savedAttendee.id,
       eventId: savedTechConf.id,
-      user: { id: savedAttendee.id } as any,
-      event: { id: savedTechConf.id } as any,
+      user: { id: savedAttendee.id },
+      event: { id: savedTechConf.id },
       cancelledAt: new Date(),
     });
     const savedReg5 = await this.regRepo.save(reg5);
@@ -216,20 +229,62 @@ export class SeedService {
 
     // 5. Create registration items
     const items = [
-      { quantity: 1, unitPrice: 149.99, registrationId: savedReg1.id, ticketTypeId: savedTickets[0].id,
-        registration: { id: savedReg1.id } as any, ticketType: { id: savedTickets[0].id } as any },
-      { quantity: 1, unitPrice: 599.99, registrationId: savedReg2.id, ticketTypeId: savedTickets[2].id,
-        registration: { id: savedReg2.id } as any, ticketType: { id: savedTickets[2].id } as any },
-      { quantity: 1, unitPrice: 10.00, registrationId: savedReg3.id, ticketTypeId: savedTickets[3].id,
-        registration: { id: savedReg3.id } as any, ticketType: { id: savedTickets[3].id } as any },
-      { quantity: 1, unitPrice: 79.99, registrationId: savedReg4.id, ticketTypeId: savedTickets[4].id,
-        registration: { id: savedReg4.id } as any, ticketType: { id: savedTickets[4].id } as any },
-      { quantity: 1, unitPrice: 299.99, registrationId: savedReg5.id, ticketTypeId: savedTickets[1].id,
-        registration: { id: savedReg5.id } as any, ticketType: { id: savedTickets[1].id } as any },
-      { quantity: 2, unitPrice: 10.00, registrationId: savedReg3.id, ticketTypeId: savedTickets[3].id,
-        registration: { id: savedReg3.id } as any, ticketType: { id: savedTickets[3].id } as any },
-      { quantity: 1, unitPrice: 79.99, registrationId: savedReg4.id, ticketTypeId: savedTickets[4].id,
-        registration: { id: savedReg4.id } as any, ticketType: { id: savedTickets[4].id } as any },
+      {
+        quantity: 1,
+        unitPrice: 149.99,
+        registrationId: savedReg1.id,
+        ticketTypeId: savedTickets[0].id,
+        registration: { id: savedReg1.id } as any,
+        ticketType: { id: savedTickets[0].id } as any,
+      },
+      {
+        quantity: 1,
+        unitPrice: 599.99,
+        registrationId: savedReg2.id,
+        ticketTypeId: savedTickets[2].id,
+        registration: { id: savedReg2.id } as any,
+        ticketType: { id: savedTickets[2].id } as any,
+      },
+      {
+        quantity: 1,
+        unitPrice: 10.0,
+        registrationId: savedReg3.id,
+        ticketTypeId: savedTickets[3].id,
+        registration: { id: savedReg3.id } as any,
+        ticketType: { id: savedTickets[3].id } as any,
+      },
+      {
+        quantity: 1,
+        unitPrice: 79.99,
+        registrationId: savedReg4.id,
+        ticketTypeId: savedTickets[4].id,
+        registration: { id: savedReg4.id } as any,
+        ticketType: { id: savedTickets[4].id } as any,
+      },
+      {
+        quantity: 1,
+        unitPrice: 299.99,
+        registrationId: savedReg5.id,
+        ticketTypeId: savedTickets[1].id,
+        registration: { id: savedReg5.id } as any,
+        ticketType: { id: savedTickets[1].id } as any,
+      },
+      {
+        quantity: 2,
+        unitPrice: 10.0,
+        registrationId: savedReg3.id,
+        ticketTypeId: savedTickets[3].id,
+        registration: { id: savedReg3.id } as any,
+        ticketType: { id: savedTickets[3].id } as any,
+      },
+      {
+        quantity: 1,
+        unitPrice: 79.99,
+        registrationId: savedReg4.id,
+        ticketTypeId: savedTickets[4].id,
+        registration: { id: savedReg4.id } as any,
+        ticketType: { id: savedTickets[4].id } as any,
+      },
     ];
 
     await this.regItemRepo.save(items.map((i) => this.regItemRepo.create(i)));
@@ -241,8 +296,8 @@ export class SeedService {
       status: 'waiting',
       userId: savedAttendee.id,
       eventId: savedNgWorkshop.id,
-      user: { id: savedAttendee.id } as any,
-      event: { id: savedNgWorkshop.id } as any,
+      user: { id: savedAttendee.id },
+      event: { id: savedNgWorkshop.id },
     });
     await this.waitlistRepo.save(waitlist1);
 
@@ -251,8 +306,8 @@ export class SeedService {
       status: 'waiting',
       userId: savedOrganizer.id,
       eventId: savedNgWorkshop.id,
-      user: { id: savedOrganizer.id } as any,
-      event: { id: savedNgWorkshop.id } as any,
+      user: { id: savedOrganizer.id },
+      event: { id: savedNgWorkshop.id },
     });
     await this.waitlistRepo.save(waitlist2);
 

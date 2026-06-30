@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { Event } from './event.entity';
 import { RegistrationItem } from './registration-item.entity';
 
@@ -22,7 +30,7 @@ export class TicketType {
   @Column({ default: 5 })
   perOrderLimit: number;
 
-  @ManyToOne(() => Event, event => event.ticketTypes)
+  @ManyToOne(() => Event, (event) => event.ticketTypes)
   @JoinColumn({ name: 'eventId' })
   event: Event;
 
@@ -32,6 +40,6 @@ export class TicketType {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => RegistrationItem, ri => ri.ticketType)
+  @OneToMany(() => RegistrationItem, (ri) => ri.ticketType)
   registrationItems: RegistrationItem[];
 }

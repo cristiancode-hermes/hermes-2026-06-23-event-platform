@@ -13,10 +13,13 @@ export class SseController {
   @Sse()
   stream(@Param('id', ParseIntPipe) id: number): Observable<MessageEvent> {
     return this.sseService.getEventStream(id).pipe(
-      map((event) => ({
-        data: JSON.stringify(event),
-        type: event.type,
-      } as MessageEvent)),
+      map(
+        (event) =>
+          ({
+            data: JSON.stringify(event),
+            type: event.type,
+          }) as MessageEvent,
+      ),
     );
   }
 }

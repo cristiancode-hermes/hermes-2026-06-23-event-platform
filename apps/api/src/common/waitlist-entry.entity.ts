@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Event } from './event.entity';
 
@@ -20,7 +27,7 @@ export class WaitlistEntry {
   @Column()
   userId: number;
 
-  @ManyToOne(() => Event, event => event.waitlistEntries)
+  @ManyToOne(() => Event, (event) => event.waitlistEntries)
   @JoinColumn({ name: 'eventId' })
   event: Event;
 

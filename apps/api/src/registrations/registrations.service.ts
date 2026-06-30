@@ -60,7 +60,9 @@ export class RegistrationsService {
         where: { userId, eventId: dto.eventId, status: 'confirmed' },
       });
       if (existingReg) {
-        throw new ConflictException('You are already registered for this event');
+        throw new ConflictException(
+          'You are already registered for this event',
+        );
       }
 
       // Calculate total quantity and price
@@ -73,7 +75,9 @@ export class RegistrationsService {
         });
 
         if (!ticketType) {
-          throw new NotFoundException(`Ticket type ${item.ticketTypeId} not found for this event`);
+          throw new NotFoundException(
+            `Ticket type ${item.ticketTypeId} not found for this event`,
+          );
         }
 
         if (item.quantity > ticketType.perOrderLimit) {

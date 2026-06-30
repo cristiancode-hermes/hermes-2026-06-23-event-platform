@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { User } from './user.entity';
 import { TicketType } from './ticket-type.entity';
 import { Registration } from './registration.entity';
@@ -39,7 +48,7 @@ export class Event {
   @Column({ default: 'active' })
   status: string;
 
-  @ManyToOne(() => User, user => user.events)
+  @ManyToOne(() => User, (user) => user.events)
   @JoinColumn({ name: 'userId' })
   organizer: User;
 
@@ -52,12 +61,12 @@ export class Event {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => TicketType, tt => tt.event, { cascade: true })
+  @OneToMany(() => TicketType, (tt) => tt.event, { cascade: true })
   ticketTypes: TicketType[];
 
-  @OneToMany(() => Registration, reg => reg.event)
+  @OneToMany(() => Registration, (reg) => reg.event)
   registrations: Registration[];
 
-  @OneToMany(() => WaitlistEntry, wl => wl.event)
+  @OneToMany(() => WaitlistEntry, (wl) => wl.event)
   waitlistEntries: WaitlistEntry[];
 }

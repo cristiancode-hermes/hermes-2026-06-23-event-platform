@@ -41,13 +41,17 @@ export class SseService {
   }
 
   getEventStream(eventId: number): Observable<SseEvent> {
-    return this.eventSubject.asObservable().pipe(
-      filter(
-        (event) =>
-          (event.type === 'capacity_update' && event.data.eventId === eventId) ||
-          (event.type === 'event_full' && event.data.eventId === eventId) ||
-          (event.type === 'waitlist_promoted' && event.data.eventId === eventId),
-      ),
-    );
+    return this.eventSubject
+      .asObservable()
+      .pipe(
+        filter(
+          (event) =>
+            (event.type === 'capacity_update' &&
+              event.data.eventId === eventId) ||
+            (event.type === 'event_full' && event.data.eventId === eventId) ||
+            (event.type === 'waitlist_promoted' &&
+              event.data.eventId === eventId),
+        ),
+      );
   }
 }

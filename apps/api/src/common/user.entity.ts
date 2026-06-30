@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { Event } from './event.entity';
 import { Registration } from './registration.entity';
 import { WaitlistEntry } from './waitlist-entry.entity';
@@ -29,12 +36,12 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Event, event => event.organizer)
+  @OneToMany(() => Event, (event) => event.organizer)
   events: Event[];
 
-  @OneToMany(() => Registration, reg => reg.user)
+  @OneToMany(() => Registration, (reg) => reg.user)
   registrations: Registration[];
 
-  @OneToMany(() => WaitlistEntry, wl => wl.user)
+  @OneToMany(() => WaitlistEntry, (wl) => wl.user)
   waitlistEntries: WaitlistEntry[];
 }

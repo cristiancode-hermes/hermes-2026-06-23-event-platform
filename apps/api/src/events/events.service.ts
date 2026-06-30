@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Event, TicketType, User } from '../common';
@@ -13,14 +17,28 @@ export class EventsService {
   ) {}
 
   async findAll(query: any) {
-    const { page = 1, limit = 10, search, category, dateFrom, dateTo, location, sortBy = 'date', sortOrder = 'ASC' } = query;
-    const qb = this.eventRepo.createQueryBuilder('event')
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      category,
+      dateFrom,
+      dateTo,
+      location,
+      sortBy = 'date',
+      sortOrder = 'ASC',
+    } = query;
+    const qb = this.eventRepo
+      .createQueryBuilder('event')
       .leftJoinAndSelect('event.ticketTypes', 'ticketTypes')
       .leftJoinAndSelect('event.organizer', 'organizer')
       .where('event.status = :status', { status: 'active' });
 
     if (search) {
-      qb.andWhere('(event.title LIKE :search OR event.description LIKE :search OR event.location LIKE :search)', { search: `%${search}%` });
+      qb.andWhere(
+        '(event.title LIKE :search OR event.description LIKE :search OR event.location LIKE :search)',
+        { search: `%${search}%` },
+      );
     }
     if (category) {
       qb.andWhere('event.category = :category', { category });
@@ -32,16 +50,27 @@ export class EventsService {
       qb.andWhere('event.date <= :dateTo', { dateTo: new Date(dateTo) });
     }
     if (location) {
-      qb.andWhere('event.location LIKE :location', { location: `%${location}%` });
+      qb.andWhere('event.location LIKE :location', {
+        location: `%${location}%`,
+      });
     }
 
-    const sortMap: Record<string, string> = { date: 'event.date', title: 'event.title' };
+    const sortMap: Record<string, string> = {
+      date: 'event.date',
+      title: 'event.title',
+    };
     const sortColumn = sortMap[sortBy] || 'event.date';
     qb.orderBy(sortColumn, sortOrder);
 
-    const [data, total] = await qb.skip((page - 1) * limit).take(limit).getManyAndCount();
+    const [data, total] = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
 
-    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return {
+      data,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findOne(id: number) {
@@ -73,7 +102,12 @@ export class EventsService {
   async create(userId: number, dto: any) {
     const event = this.eventRepo.create({
       title: dto.title,
-      slug: dto.slug || dto.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      slug:
+        dto.slug ||
+        dto.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, ''),
       description: dto.description,
       date: new Date(dto.date),
       endDate: dto.endDate ? new Date(dto.endDate) : undefined,
@@ -83,13 +117,17 @@ export class EventsService {
       capacity: dto.capacity,
       status: 'active',
       userId,
-      organizer: { id: userId } as any,
+      organizer: { id: userId },
     });
     const saved = await this.eventRepo.save(event);
 
     if (dto.ticketTypes?.length) {
       const ticketTypes = dto.ticketTypes.map((tt: any) =>
-        this.ticketTypeRepo.create({ ...tt, eventId: saved.id, event: { id: saved.id } as any }),
+        this.ticketTypeRepo.create({
+          ...tt,
+          eventId: saved.id,
+          event: { id: saved.id } as any,
+        }),
       );
       await this.ticketTypeRepo.save(ticketTypes);
     }
@@ -106,7 +144,8 @@ export class EventsService {
     if (dto.slug !== undefined) event.slug = dto.slug;
     if (dto.description !== undefined) event.description = dto.description;
     if (dto.date !== undefined) event.date = new Date(dto.date);
-    if (dto.endDate !== undefined) event.endDate = dto.endDate ? new Date(dto.endDate) : undefined as any;
+    if (dto.endDate !== undefined)
+      event.endDate = dto.endDate ? new Date(dto.endDate) : (undefined as any);
     if (dto.location !== undefined) event.location = dto.location;
     if (dto.category !== undefined) event.category = dto.category;
     if (dto.imageUrl !== undefined) event.imageUrl = dto.imageUrl;
@@ -118,10 +157,14 @@ export class EventsService {
   }
 
   async remove(userId: number, id: number) {
-    const event = await this.eventRepo.findOne({ where: { id }, relations: { registrations: true } });
+    const event = await this.eventRepo.findOne({
+      where: { id },
+      relations: { registrations: true },
+    });
     if (!event) throw new NotFoundException('Event not found');
     if (event.userId !== userId) throw new ForbiddenException('Not your event');
-    const activeRegs = event.registrations?.filter(r => r.status === 'confirmed') || [];
+    const activeRegs =
+      event.registrations?.filter((r) => r.status === 'confirmed') || [];
     if (activeRegs.length > 0) {
       event.status = 'cancelled';
       await this.eventRepo.save(event);
@@ -141,7 +184,7 @@ export class EventsService {
     return regRepo.find({
       where: { eventId, status: 'confirmed' },
       relations: { user: true, items: { ticketType: true } },
-      order: { createdAt: 'DESC' } as any,
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -155,7 +198,7 @@ export class EventsService {
     return wlRepo.find({
       where: { eventId, status: 'waiting' },
       relations: { user: true },
-      order: { position: 'ASC' } as any,
+      order: { position: 'ASC' },
     });
   }
 }

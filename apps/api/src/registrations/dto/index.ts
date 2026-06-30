@@ -1,1 +1,4 @@
-export { CreateRegistrationDto, CreateRegistrationItemDto } from './create-registration.dto';
+export {
+  CreateRegistrationDto,
+  CreateRegistrationItemDto,
+} from './create-registration.dto';

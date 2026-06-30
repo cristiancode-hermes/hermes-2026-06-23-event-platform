@@ -29,7 +29,9 @@ export class WaitlistService {
       where: { userId, eventId: dto.eventId, status: 'waiting' },
     });
     if (existing) {
-      throw new ConflictException('You are already on the waitlist for this event');
+      throw new ConflictException(
+        'You are already on the waitlist for this event',
+      );
     }
 
     // Get next position using query builder
@@ -43,8 +45,8 @@ export class WaitlistService {
       eventId: dto.eventId,
       position: (lastEntry?.position ?? 0) + 1,
       status: 'waiting',
-      user: { id: userId } as any,
-      event: { id: dto.eventId } as any,
+      user: { id: userId },
+      event: { id: dto.eventId },
     });
 
     return this.waitlistRepo.save(entry);

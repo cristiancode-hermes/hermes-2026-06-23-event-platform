@@ -16,14 +16,25 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET', 'super-secret-key-change-in-prod'),
+      secretOrKey: config.get<string>(
+        'JWT_SECRET',
+        'super-secret-key-change-in-prod',
+      ),
     });
   }
 
   async validate(payload: { sub: number }) {
     const user = await this.userRepo.findOne({
       where: { id: payload.sub },
-      select: { id: true, name: true, email: true, avatarUrl: true, bio: true, createdAt: true, updatedAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        avatarUrl: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
     if (!user) {
       throw new UnauthorizedException();
